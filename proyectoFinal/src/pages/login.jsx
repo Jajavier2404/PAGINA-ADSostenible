@@ -18,7 +18,7 @@ export default function Login() {
     };
 
     return (
-        <div className="min-h-screen bg-gradient-to-br from-blue-100 to-indigo-200 flex items-center justify-center p-4">
+        <div className="min-h-screen bg-gradient-to-br from-green-100 to-emerald-300 flex items-center justify-center p-4">
             
             <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
                 <h2 className="text-2xl font-bold text-center text-gray-800 mb-6">Iniciar Sesión</h2>
@@ -46,7 +46,7 @@ export default function Login() {
                     
                     <button
                         onClick={handleSubmit}
-                        className="w-full bg-blue-600 text-white py-3 rounded-lg hover:bg-blue-700 transition duration-200 font-semibold"
+                        className="w-full bg-emerald-600 text-white py-3 rounded-lg hover:bg-emerald-700 transition duration-200 font-semibold"
                     >
                         Ingresar
                     </button>
