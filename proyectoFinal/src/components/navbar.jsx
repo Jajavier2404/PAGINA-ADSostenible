@@ -46,7 +46,7 @@ const Navbar = () => {
               className="flex items-center space-x-2 text-green-700 hover:text-green-800 transition-colors"
             >
               <Leaf className="h-8 w-8" />
-              <span className="font-bold text-xl">Ambiente Sostenible</span>
+              <span className="font-bold text-xl">Proyecto Final</span>
             </button>
           </div>
 
