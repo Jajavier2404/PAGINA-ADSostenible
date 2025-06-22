@@ -10,7 +10,7 @@ export default function AppRoutes() {
             <Route path="/" element={<Login />} />
             <Route path="/onu" element={<Onu />} />
             <Route path="/Restric" element={<Restric />} />
-            <Route path="/objtHc" element={<ObjectivosHC />} />
+            <Route path="/objetHc" element={<ObjectivosHC />} />
             <Route path="/hc" element={<HuellaCarbono />} />
         </Routes>
     )
