@@ -1,0 +1,79 @@
+DEPENDENCIAS DEL PROYECTO
+
+========================
+BACKEND (Node.js)
+========================
+- express
+- cors
+- sqlite3
+- sqlite
+- bcrypt
+
+Comando para instalar todas:
+npm install express cors sqlite3 sqlite bcrypt
+
+========================
+FRONTEND (React + Vite)
+========================
+- react
+- react-dom
+- @vitejs/plugin-react
+- vite
+- lucide-react
+- lucid-dream
+
+Comando para instalar (si usas npm):
+npm install react react-dom @vitejs/plugin-react vite lucide-react lucid-dream
+
+========================
+ESTILOS
+========================
+- tailwindcss
+
+Comando para instalar:
+npm install tailwindcss
+
+========================
+LINTING Y DESARROLLO
+========================
+- eslint
+- @eslint/js
+- eslint-plugin-react-hooks
+- eslint-plugin-react-refresh
+- globals
+
+Comando para instalar:
+npm install eslint @eslint/js eslint-plugin-react-hooks eslint-plugin-react-refresh globals
+
+========================
+EXTENSIONES RECOMENDADAS DE VSCODE
+========================
+- ES7+ React/Redux/React-Native snippets
+- Prettier - Code formatter
+- ESLint
+- Tailwind CSS IntelliSense
+- SQLite Viewer (opcional, para ver la base de datos)
+- Simple React Snippets (opcional)
+
+========================
+REQUISITOS DEL SISTEMA
+========================
+- Node.js (v18 o superior recomendado)
+- npm (v9 o superior recomendado)
+
+========================
+COMANDOS ÚTILES
+========================
+# Iniciar backend
+cd backend
+node server.js
+
+# Iniciar frontend
+npm run dev
+
+========================
+NOTAS
+========================
+- Asegúrate de tener la carpeta backend y el archivo server.js en la ruta correcta.
+- El archivo users.db se crea automáticamente en la carpeta backend al iniciar el backend.
+- Si usas otro gestor de paquetes (yarn/pnpm), adapta los comandos de instalación.
