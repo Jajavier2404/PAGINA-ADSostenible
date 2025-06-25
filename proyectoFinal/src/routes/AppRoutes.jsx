@@ -4,6 +4,7 @@ import Onu from "../pages/Onu"
 import Restric from "../pages/Restric";
 import ObjectivosHC from "../pages/objetHC";
 import HuellaCarbono from "../pages/huellaCarbono";
+import Grafico from "../pages/ejemplo";
 export default function AppRoutes() {
     return (
         <Routes>
@@ -12,6 +13,8 @@ export default function AppRoutes() {
             <Route path="/Restric" element={<Restric />} />
             <Route path="/objetHc" element={<ObjectivosHC />} />
             <Route path="/hc" element={<HuellaCarbono />} />
+            <Route path="/grafico" element={<Grafico />} />
+            <Route path="*" element={<Login />} />
         </Routes>
     )
 }

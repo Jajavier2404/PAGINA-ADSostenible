@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { Globe, Shield, AlertTriangle, Lock, Eye, EyeOff, Search, Filter } from 'lucide-react';
-import Navbar from "../components/navbar"
+import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement } from 'chart.js';
+import { Doughnut, Bar } from 'react-chartjs-2';
+import Navbar from '../components/navbar';
+ChartJS.register(ArcElement, Tooltip, Legend, CategoryScale, LinearScale, BarElement);
 
-// Datos de restricciones por país
 const restrictionsData = [
     {
         country: "China",
@@ -155,7 +157,7 @@ const restrictionsData = [
 
     const levelText = {
     extreme: "Extrema",
-    severe: "Severa", 
+    severe: "Severa",
     moderate: "Moderada",
     light: "Ligera"
     };
@@ -171,9 +173,128 @@ const restrictionsData = [
         return matchesSearch && matchesFilter;
     });
 
+    // Datos para la gráfica de dona (distribución por nivel de restricción)
+    const levelCounts = restrictionsData.reduce((acc, country) => {
+        acc[country.level] = (acc[country.level] || 0) + 1;
+        return acc;
+    }, {});
+
+    const doughnutData = {
+        labels: Object.keys(levelText).map(key => levelText[key]),
+        datasets: [
+            {
+                data: Object.keys(levelText).map(key => levelCounts[key] || 0),
+                backgroundColor: [
+                    'rgba(239, 68, 68, 0.8)', // red-500
+                    'rgba(249, 115, 22, 0.8)', // orange-500
+                    'rgba(250, 204, 21, 0.8)', // yellow-500
+                    'rgba(34, 197, 94, 0.8)' // green-500
+                ],
+                borderColor: [
+                    'rgba(239, 68, 68, 1)',
+                    'rgba(249, 115, 22, 1)',
+                    'rgba(250, 204, 21, 1)',
+                    'rgba(34, 197, 94, 1)'
+                ],
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const doughnutOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'right',
+                labels: {
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+            title: {
+                display: true,
+                text: 'Distribución Global de Restricciones',
+                font: {
+                    size: 18
+                },
+                color: '#333'
+            }
+        }
+    };
+
+    // Datos para la gráfica de barras (libertad de internet por país)
+    const barData = {
+        labels: restrictionsData.map(country => country.country),
+        datasets: [
+            {
+                label: 'Índice de Libertad de Internet / 100',
+                data: restrictionsData.map(country => country.internetFreedom),
+                backgroundColor: restrictionsData.map(country => {
+                    if (country.internetFreedom > 70) return 'rgba(34, 197, 94, 0.8)'; // green-500
+                    if (country.internetFreedom > 40) return 'rgba(250, 204, 21, 0.8)'; // yellow-500
+                    return 'rgba(239, 68, 68, 0.8)'; // red-500
+                }),
+                borderColor: restrictionsData.map(country => {
+                    if (country.internetFreedom > 70) return 'rgba(34, 197, 94, 1)';
+                    if (country.internetFreedom > 40) return 'rgba(250, 204, 21, 1)';
+                    return 'rgba(239, 68, 68, 1)';
+                }),
+                borderWidth: 1,
+            },
+        ],
+    };
+
+    const barOptions = {
+        responsive: true,
+        maintainAspectRatio: false,
+        plugins: {
+            legend: {
+                position: 'top',
+                labels: {
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+            title: {
+                display: true,
+                text: 'Libertad de Internet por País',
+                font: {
+                    size: 18
+                },
+                color: '#333'
+            }
+        },
+        scales: {
+            y: {
+                beginAtZero: true,
+                max: 100,
+                title: {
+                    display: true,
+                    text: 'Puntuación de Libertad',
+                    font: {
+                        size: 14
+                    }
+                }
+            },
+            x: {
+                title: {
+                    display: true,
+                    text: 'País',
+                    font: {
+                        size: 14
+                    }
+                }
+            }
+        }
+    };
+
+
     return (
         <div className="min-h-screen bg-gradient-to-br from-green-50 via-blue-50 to-indigo-50">
-            <Navbar />
+             <Navbar />
 
         {/* Hero Section */}
         <div className="relative overflow-hidden bg-gradient-to-r from-green-600 to-emerald-900">
@@ -197,7 +318,7 @@ const restrictionsData = [
                 </p>
             </div>
             </div>
-            
+
             {/* Floating icons animation */}
             <div className="absolute top-20 left-10 animate-bounce">
             <div className="w-4 h-4 bg-white bg-opacity-30 rounded-full"></div>
@@ -225,7 +346,7 @@ const restrictionsData = [
                 </div>
                 <p className="text-sm text-gray-500">Países con acceso libre a internet</p>
             </div>
-            
+
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-yellow-100">
                 <div className="flex items-center mb-4">
                 <div className="bg-yellow-500 rounded-full p-3 mr-4">
@@ -238,7 +359,7 @@ const restrictionsData = [
                 </div>
                 <p className="text-sm text-gray-500">Países con restricciones moderadas</p>
             </div>
-            
+
             <div className="bg-white rounded-2xl p-6 shadow-lg border border-red-100">
                 <div className="flex items-center mb-4">
                 <div className="bg-red-500 rounded-full p-3 mr-4">
@@ -251,6 +372,32 @@ const restrictionsData = [
                 </div>
                 <p className="text-sm text-gray-500">Países con censura severa</p>
             </div>
+            </div>
+        </div>
+
+        {/* Sección de Gráficas */}
+        <div className="container mx-auto px-6 py-12">
+            <div className="text-center mb-12">
+                <h3 className="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    Análisis Global de Restricciones
+                </h3>
+                <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+                    Visualiza la distribución de los niveles de restricción y la libertad de internet por país.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                {/* Gráfica de Dona */}
+                <div className="bg-white rounded-2xl p-6 shadow-lg border border-blue-100 flex items-center justify-center">
+                    <div className="w-full max-w-md h-80"> {/* Establecer una altura fija para la gráfica */}
+                        <Doughnut data={doughnutData} options={doughnutOptions} />
+                    </div>
+                </div>
+                {/* Gráfica de Barras */}
+                <div className="bg-white rounded-2xl p-6 shadow-lg border border-green-100 flex items-center justify-center">
+                    <div className="w-full max-w-xl h-80"> {/* Establecer una altura fija para la gráfica */}
+                        <Bar data={barData} options={barOptions} />
+                    </div>
+                </div>
             </div>
         </div>
 
@@ -308,7 +455,7 @@ const restrictionsData = [
                 onClick={() => setSelectedCountry(country)}
                 >
                 <div className="absolute inset-0 bg-gradient-to-br from-green-500 to-emerald-600 opacity-0 group-hover:opacity-10 transition-opacity duration-300"></div>
-                
+
                 <div className="relative p-6 cursor-pointer">
                     <div className="flex items-center justify-between mb-4">
                     <div className="flex items-center space-x-3">
@@ -327,10 +474,10 @@ const restrictionsData = [
                         <span className="text-gray-800 font-bold">{country.internetFreedom}/100</span>
                         </div>
                         <div className="w-full bg-gray-200 rounded-full h-3">
-                        <div 
+                        <div
                             className={`h-3 rounded-full transition-all duration-500 ${
-                            country.internetFreedom > 70 ? 'bg-gradient-to-r from-green-500 to-green-600' : 
-                            country.internetFreedom > 40 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' : 
+                            country.internetFreedom > 70 ? 'bg-gradient-to-r from-green-500 to-green-600' :
+                            country.internetFreedom > 40 ? 'bg-gradient-to-r from-yellow-500 to-orange-500' :
                             'bg-gradient-to-r from-red-500 to-red-600'
                             }`}
                             style={{ width: `${country.internetFreedom}%` }}
@@ -448,10 +595,10 @@ const restrictionsData = [
                         <span className="text-gray-700 font-medium">Índice de Libertad de Internet</span>
                         <div className="flex items-center space-x-2">
                             <div className="w-16 bg-gray-200 rounded-full h-2">
-                            <div 
+                            <div
                                 className={`h-2 rounded-full ${
-                                selectedCountry.internetFreedom > 70 ? 'bg-green-500' : 
-                                selectedCountry.internetFreedom > 40 ? 'bg-yellow-500' : 
+                                selectedCountry.internetFreedom > 70 ? 'bg-green-500' :
+                                selectedCountry.internetFreedom > 40 ? 'bg-yellow-500' :
                                 'bg-red-500'
                                 }`}
                                 style={{ width: `${selectedCountry.internetFreedom}%` }}
